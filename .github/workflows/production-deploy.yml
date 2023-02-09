@@ -56,7 +56,7 @@ jobs:
           server: 70.32.23.102
           username: kir@ainsys.com
           password: banan184
-          server-dir: /wp-content/plugins/ainsys-connector-content/
+          server-dir: /wp-content/plugins/ainsys-connector-cf7/
           exclude: |
             **/.git*
             **/.git*/**

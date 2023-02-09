@@ -58,7 +58,7 @@ function check_if_master_plugin_is_active() {
 		} );
 	}
 
-	/*if ( ! function_exists( 'acf_get_field' ) ) {
+	if ( ! function_exists( 'acf_get_field' ) ) {
 		// show admin notice on error.
 		add_action( 'admin_notices', function () {
 			$class   = 'notice notice-error is-dismissible';
@@ -66,7 +66,7 @@ function check_if_master_plugin_is_active() {
 
 			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		} );
-	}*/
+	}
 
 }
 
