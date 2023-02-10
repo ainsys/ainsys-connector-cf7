@@ -20,11 +20,9 @@ class Admin_UI implements Hooked {
 
 	public function init_hooks() {
 
-		add_filter( 'wpcf7_spam', '__return_false' );
 		add_filter( 'ainsys_status_list', [ $this, 'add_status_of_component' ], 10, 1 );
 		add_filter( 'ainsys_get_entities_list', [ $this, 'add_entity_to_list' ], 10, 1 );
 		add_filter( 'ainsys_check_connection_request', [ $this, 'check_entity' ], 15, 3 );
-		//add_action( 'wpcf7_init', array( $this, 'register_service' ), 15, 0 );
 
 		add_filter( 'wpcf7_form_hidden_fields', [ $this, 'add_hidden_fields' ], 100, 1 );
 
@@ -81,25 +79,6 @@ class Admin_UI implements Hooked {
 	}
 
 
-	public function register_service() {
-
-		if ( class_exists( '\WPCF7_Integration' ) ) {
-			$integration = \WPCF7_Integration::get_instance();
-
-			$integration->add_category(
-				'ainsys',
-				__( 'AINSYS', 'contact-form-7' )
-			);
-
-			$integration->add_service(
-				'ainsys',
-				$this->wpcf7_service
-			);
-		}
-
-	}
-
-
 	public function add_hidden_fields( $fields ): array {
 
 		return array_merge(
@@ -124,25 +103,6 @@ class Admin_UI implements Hooked {
 		];
 
 		return $status_items;
-	}
-
-
-	/**
-	 * @param $form_id
-	 *
-	 * @return string
-	 */
-	protected function get_url( $form_id ): string {
-
-		$url_args = sprintf( '/contact-form-7/v1/contact-forms/%s/feedback', $form_id );
-
-		if ( Helper::is_localhost() ) {
-			$url = 'https://stage3.ainsys.a2hosted.com/wp-json' . $url_args;
-		} else {
-			$url = rest_url( $url_args );
-		}
-
-		return $url;
 	}
 
 
@@ -203,40 +163,6 @@ class Admin_UI implements Hooked {
 		}
 
 		return $args;
-	}
-
-
-	/**
-	 * @param  string $url
-	 * @param  array  $args
-	 *
-	 * @return bool|string
-	 */
-	protected function remote_post( string $url, array $args ) {
-
-		$curl = curl_init();
-
-		curl_setopt_array( $curl, [
-			CURLOPT_POST           => true,
-			CURLOPT_URL            => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING       => '',
-			CURLOPT_MAXREDIRS      => 10,
-			CURLOPT_TIMEOUT        => 0,
-			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-			CURLOPT_POSTFIELDS     => $args,
-			CURLOPT_HTTPHEADER     => [
-				'user-agent: WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ),
-				'Content-Type: multipart/form-data',
-			],
-		] );
-
-		$response = curl_exec( $curl );
-
-		curl_close( $curl );
-
-		return $response;
 	}
 
 }

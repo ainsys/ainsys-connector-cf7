@@ -25,50 +25,8 @@ class Process_Form extends Process implements Hooked {
 	}
 
 
-	public function on_wpcf7_submit( \WPCF7_ContactForm $wpcf7, $result = [] ) {
-
-		if ( 'mail_sent' !== $result['status'] ) {
-			return $wpcf7;
-		}
-
-		$form_id = $wpcf7->id();
-
-		//      $fields = $wpcf7->scan_form_tags();
-		//
-		//      foreach ( $fields as $key => $field ) {
-		//          if ( 'submit' === $field['basetype'] ) {
-		//              unset( $fields[ $key ] );
-		//          }
-		//      }
-		//
-		//      $fields = array_values( $fields );
-
-		$request_action = 'UPDATE';
-
-		$request_data = [
-			'entity'  => [
-				'id'   => time(),
-				'name' => 'wpcf7',
-			],
-			'action'  => $request_action,
-			'payload' => array_merge( [ 'id' => time() ], $_POST ),
-		];
-
-		try {
-			$server_response = $this->core->curl_exec_func( $request_data );
-		} catch ( \Exception $e ) {
-			$server_response = 'Error: ' . $e->getMessage();
-			$this->core->send_error_email( $server_response );
-		}
-
-		$this->logger->save( $form_id, $request_action, serialize( $request_data ), serialize( $server_response ), 0 );
-
-		return $wpcf7;
-	}
-
-
 	/**
-	 * Sends updated post details to AINSYS.
+	 * Sends posted data details to AINSYS.
 	 *
 	 * @param  \WPCF7_ContactForm $contact_form
 	 */
