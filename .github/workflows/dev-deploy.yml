@@ -57,7 +57,7 @@ jobs:
           server: 70.32.23.102
           username: ${{ secrets.FTP_USER_STAGE }}
           password: ${{ secrets.FTP_PASS_STAGE }}
-          server-dir: /wp-content/plugins/ainsys-connector-cf7/
+          server-dir: /wp-content/plugins/ainsys-connector-wpcf7/
           exclude: |
             **/.git*
             **/.git*/**

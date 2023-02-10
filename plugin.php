@@ -3,20 +3,15 @@
 namespace Ainsys\Connector\WPCF7;
 
 /**
- * @link              https://github.com/ainsys/ainsys-wp-connector-plugin
- * @since             1.0.0
- * @package           ainsys-connector
- *
- * @wordpress-plugin
  * Plugin Name:       AINSYS connector WPCF7 Integration
  * Plugin URI: https://app.ainsys.com/
- * Description: AINSYS connector master.
+ * Description: AINSYS connector WPCF7 Integration
  * Version:           1.1.0
  * Author:            AINSYS
  * Author URI:        https://app.ainsys.com/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     Ainsysconnector
+ * Text Domain:     ainsys_connector_cf7
  * Domain Path:     /languages
  */
 
