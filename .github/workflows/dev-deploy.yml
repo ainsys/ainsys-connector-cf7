@@ -55,8 +55,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
           server: 70.32.23.102
-          username: deploy_stage@stage3.ainsys.a2hosted.com
-          password: Tt6Q{wT?U#L[
+          username: ${{ secrets.FTP_USER_STAGE }}
+          password: ${{ secrets.FTP_PASS_STAGE }}
           server-dir: /wp-content/plugins/ainsys-connector-cf7/
           exclude: |
             **/.git*
@@ -64,3 +64,7 @@ jobs:
             **/.github*/**
             **/node_modules/**
             **/src/**
+            CHANGELOG.md
+            README.md
+            readme.txt
+            .distignore
