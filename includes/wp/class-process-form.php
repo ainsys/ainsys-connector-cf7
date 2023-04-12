@@ -134,7 +134,7 @@ class Process_Form extends Process implements Hooked {
 		$utm_tags = [];
 		foreach ( $posted_data as $key => $val ) {
 			if ( false !== strpos( $key, 'utm_' ) ) {
-				$utm_tags[ $key ] = $val;
+				$utm_tags[ $key ] = $this->sanitize_data( $val );
 			}
 		}
 
@@ -152,7 +152,7 @@ class Process_Form extends Process implements Hooked {
 		$service_data = [];
 		foreach ( $posted_data as $key => $val ) {
 			if ( false !== strpos( $key, 'wpcf7_' ) ) {
-				$service_data[ $key ] = $val;
+				$service_data[ $key ] = $this->sanitize_data( $val );
 			}
 		}
 
@@ -195,28 +195,41 @@ class Process_Form extends Process implements Hooked {
 		$posted_fields = [];
 
 		if ( ! empty( $filtered_fields['key_name'] ) ) {
-			$posted_fields['name'] = sanitize_text_field( trim( $posted_data[ $filtered_fields['key_name'] ] ) );
+			$posted_fields['name'] = $this->sanitize_data( $posted_data[ $filtered_fields['key_name'] ] );
 		}
 
 		if ( ! empty( $filtered_fields['key_email'] ) ) {
 			$posted_fields['email'] = [
-				'n0' => [
-					'VALUE'      => sanitize_text_field( trim( $posted_data[ $filtered_fields['key_email'] ] ) ),
+				[
+					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_email'] ] ),
 					'VALUE_TYPE' => 'WORK',
+					'TYPE_ID'    => 'EMAIL',
 				],
 			];
 		}
 
 		if ( ! empty( $filtered_fields['key_phone'] ) ) {
 			$posted_fields['phone'] = [
-				'n0' => [
-					'VALUE'      => sanitize_text_field( trim( $posted_data[ $filtered_fields['key_phone'] ] ) ),
+				[
+					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_phone'] ] ),
 					'VALUE_TYPE' => 'WORK',
+					'TYPE_ID'    => 'PHONE',
 				],
 			];
 		}
 
 		return $posted_fields;
+	}
+
+
+	/**
+	 * @param $posted_data
+	 *
+	 * @return string
+	 */
+	protected function sanitize_data( $posted_data ): string {
+
+		return sanitize_text_field( trim( $posted_data ) );
 	}
 
 }
