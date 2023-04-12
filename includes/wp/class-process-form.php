@@ -86,12 +86,17 @@ class Process_Form extends Process implements Hooked {
 	 */
 	public function prepare_data( $form_id, $posted_data ): array {
 
+		$data = array_merge( $this->get_utm_tags( $posted_data ), $this->get_service_data( $posted_data ) );
+
+		$posted_fields = array_merge( $this->get_posted_data( $form_id, $posted_data ), $data );
+
 		return array_merge(
 			[
+				'id'        => hexdec( crc32( $form_id . $posted_fields['email']['n0']['VALUE'] ) ),
 				'form_id'   => $form_id,
 				'form_name' => $this->get_form_name( $form_id ),
 			],
-			$posted_data
+			$posted_fields
 		);
 
 	}
@@ -116,6 +121,102 @@ class Process_Form extends Process implements Hooked {
 	protected function get_entity_name( $form_id ): string {
 
 		return sprintf( '%s-%s-%s', self::$entity, $form_id, $this->get_form_name( $form_id ) );
+	}
+
+
+	/**
+	 * @param $posted_data
+	 *
+	 * @return array
+	 */
+	protected function get_utm_tags( $posted_data ): array {
+
+		$utm_tags = [];
+		foreach ( $posted_data as $key => $val ) {
+			if ( false !== strpos( $key, 'utm_' ) ) {
+				$utm_tags[ $key ] = $val;
+			}
+		}
+
+		return $utm_tags;
+	}
+
+
+	/**
+	 * @param $posted_data
+	 *
+	 * @return array
+	 */
+	protected function get_service_data( $posted_data ): array {
+
+		$service_data = [];
+		foreach ( $posted_data as $key => $val ) {
+			if ( false !== strpos( $key, 'wpcf7_' ) ) {
+				$service_data[ $key ] = $val;
+			}
+		}
+
+		return $service_data;
+	}
+
+
+	/**
+	 * @param $form_id
+	 * @param $posted_data
+	 *
+	 * @return array
+	 */
+	protected function get_posted_data( $form_id, $posted_data ): array {
+
+		$filtered_fields = [];
+
+		$contact_form = WPCF7_ContactForm::get_instance( $form_id );
+		$form_fields  = $contact_form->scan_form_tags();
+
+		foreach ( $form_fields as $field ) {
+			if ( 'text' === $field['basetype'] && false !== strpos( $field['name'], 'name' ) ) {
+
+				$filtered_fields['key_name'] = $field['name'];
+			}
+
+			if ( false !== strpos( $field['basetype'], 'email' ) ) {
+
+				$filtered_fields['key_email'] = $field['name'];
+			}
+
+			if ( ( 'text' === $field['basetype'] || 'tel' === $field['basetype'] )
+			     && ( false !== strpos( $field['name'], 'tel' ) || false !== strpos( $field['name'], 'phone' ) )
+			) {
+				$filtered_fields['key_phone'] = $field['name'];
+			}
+
+		}
+
+		$posted_fields = [];
+
+		if ( ! empty( $filtered_fields['key_name'] ) ) {
+			$posted_fields['name'] = sanitize_text_field( trim( $posted_data[ $filtered_fields['key_name'] ] ) );
+		}
+
+		if ( ! empty( $filtered_fields['key_email'] ) ) {
+			$posted_fields['email'] = [
+				'n0' => [
+					'VALUE'      => sanitize_text_field( trim( $posted_data[ $filtered_fields['key_email'] ] ) ),
+					'VALUE_TYPE' => 'WORK',
+				],
+			];
+		}
+
+		if ( ! empty( $filtered_fields['key_phone'] ) ) {
+			$posted_fields['phone'] = [
+				'n0' => [
+					'VALUE'      => sanitize_text_field( trim( $posted_data[ $filtered_fields['key_phone'] ] ) ),
+					'VALUE_TYPE' => 'WORK',
+				],
+			];
+		}
+
+		return $posted_fields;
 	}
 
 }
