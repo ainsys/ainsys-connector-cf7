@@ -6,7 +6,7 @@ namespace Ainsys\Connector\WPCF7;
  * Plugin Name:       AINSYS connector WPCF7 Integration
  * Plugin URI: https://app.ainsys.com/
  * Description: AINSYS connector WPCF7 Integration
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            AINSYS
  * Author URI:        https://app.ainsys.com/
  * License: GPLv2 or later
