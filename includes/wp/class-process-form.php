@@ -215,7 +215,6 @@ class Process_Form extends Process implements Hooked {
 				[
 					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_email'] ] ),
 					'VALUE_TYPE' => 'WORK',
-					'TYPE_ID'    => 'EMAIL',
 				],
 			];
 		}
@@ -225,7 +224,6 @@ class Process_Form extends Process implements Hooked {
 				[
 					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_phone'] ] ),
 					'VALUE_TYPE' => 'WORK',
-					'TYPE_ID'    => 'PHONE',
 				],
 			];
 		}
