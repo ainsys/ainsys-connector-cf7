@@ -92,9 +92,10 @@ class Process_Form extends Process implements Hooked {
 
 		return array_merge(
 			[
-				'id'        => hexdec( crc32( $form_id . $posted_fields['email']['n0']['VALUE'] ) ),
-				'form_id'   => $form_id,
-				'form_name' => $this->get_form_name( $form_id ),
+				'id'         => hexdec( crc32( $form_id . $posted_fields['email']['n0']['VALUE'] ) ),
+				'form_id'    => $form_id,
+				'form_title' => $this->get_form_title( $form_id ),
+				'form_name'  => $this->get_form_name( $form_id ),
 			],
 			$posted_fields
 		);
@@ -118,9 +119,20 @@ class Process_Form extends Process implements Hooked {
 	 *
 	 * @return string
 	 */
+	protected function get_form_title( $form_id ): string {
+
+		return get_post( $form_id )->post_title;
+	}
+
+
+	/**
+	 * @param $form_id
+	 *
+	 * @return string
+	 */
 	protected function get_entity_name( $form_id ): string {
 
-		return sprintf( '%s-%s-%s', self::$entity, $form_id, $this->get_form_name( $form_id ) );
+		return sprintf( '%s-%s', self::$entity, $form_id );
 	}
 
 
