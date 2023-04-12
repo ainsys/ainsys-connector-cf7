@@ -92,7 +92,7 @@ class Process_Form extends Process implements Hooked {
 
 		return array_merge(
 			[
-				'id'         => hexdec( crc32( $form_id . $posted_fields['email']['n0']['VALUE'] ) ),
+				'id'         => hexdec( crc32( $form_id . $posted_fields['email'][0]['VALUE'] ) ),
 				'form_id'    => $form_id,
 				'form_title' => $this->get_form_title( $form_id ),
 				'form_name'  => $this->get_form_name( $form_id ),
