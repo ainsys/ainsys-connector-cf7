@@ -217,7 +217,6 @@ class Process_Form extends Process implements Hooked {
 					'ID'         => Helper::generate_hash( $posted_data[ $filtered_fields['key_email'] ] ),
 					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_email'] ] ),
 					'VALUE_TYPE' => 'WORK',
-					'TYPE_ID'    => 'EMAIL',
 				],
 			];
 		}
@@ -228,7 +227,6 @@ class Process_Form extends Process implements Hooked {
 					'ID'         => Helper::generate_hash( $posted_data[ $filtered_fields['key_phone'] ] ),
 					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_phone'] ] ),
 					'VALUE_TYPE' => 'WORK',
-					'TYPE_ID'    => 'PHONE',
 				],
 			];
 		}
