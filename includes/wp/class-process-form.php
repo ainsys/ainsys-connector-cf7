@@ -2,6 +2,7 @@
 
 namespace Ainsys\Connector\WPCF7\WP;
 
+use Ainsys\Connector\Master\Helper;
 use Ainsys\Connector\Master\Hooked;
 use Ainsys\Connector\Master\WP\Process;
 use Ainsys\Connector\Master\Conditions;
@@ -92,7 +93,7 @@ class Process_Form extends Process implements Hooked {
 
 		return array_merge(
 			[
-				'id'         => hexdec( crc32( $form_id . $posted_fields['email'][0]['VALUE'] ) ),
+				'id'         => Helper::generate_hash( $form_id . $posted_fields['email'][0]['VALUE'] ),
 				'form_id'    => $form_id,
 				'form_title' => $this->get_form_title( $form_id ),
 				'form_name'  => $this->get_form_name( $form_id ),
@@ -213,6 +214,7 @@ class Process_Form extends Process implements Hooked {
 		if ( ! empty( $filtered_fields['key_email'] ) ) {
 			$posted_fields['email'] = [
 				[
+					'ID'         => Helper::generate_hash( $posted_data[ $filtered_fields['key_email'] ] ),
 					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_email'] ] ),
 					'VALUE_TYPE' => 'WORK',
 				],
@@ -222,6 +224,7 @@ class Process_Form extends Process implements Hooked {
 		if ( ! empty( $filtered_fields['key_phone'] ) ) {
 			$posted_fields['phone'] = [
 				[
+					'ID'         => Helper::generate_hash( $posted_data[ $filtered_fields['key_phone'] ] ),
 					'VALUE'      => $this->sanitize_data( $posted_data[ $filtered_fields['key_phone'] ] ),
 					'VALUE_TYPE' => 'WORK',
 				],
